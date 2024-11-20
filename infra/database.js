@@ -18,13 +18,16 @@ async function query(queryObject) {
 }
 
 async function getNewClient() {
+  console.log("getSSLValues: " + getSSLValues());
+  console.log("POSTGRES_CA: " + process.env.POSTGRES_CA);
+
   const client = new Client({
     host: process.env.POSTGRES_HOST,
     port: process.env.POSTGRES_PORT,
     user: process.env.POSTGRES_USER,
     database: process.env.POSTGRES_DB,
     password: process.env.POSTGRES_PASSWORD,
-    ssl: true, //getSSLValues(),
+    ssl: getSSLValues(),
   });
   await client.connect();
   return client;

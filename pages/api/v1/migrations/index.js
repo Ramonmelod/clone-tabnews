@@ -9,7 +9,7 @@ export default async function migrations(request, response) {
       dbClient: dbClient,
       dryRun: true,
       dir: join("infra", "migrations"), // metodo join aplicado ao path para que caminho seja resolvido para diferentes S.O
-      direction: "up", // direção da migration
+      direction: "up", // direção da migration (down)
       verbose: true,
       migrationsTable: "pgmigrations", // define a tabela de regitro das migrations
     });
