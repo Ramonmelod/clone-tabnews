@@ -29,4 +29,5 @@ export default async function migrations(request, response) {
     response.status(200).json(migrations);
   }
   response.status(405).end();
+  await dbClient.end(); //closing connection opened in dbClient to avoid opened connections for other methods
 }
