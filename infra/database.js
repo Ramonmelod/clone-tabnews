@@ -5,8 +5,8 @@ async function query(queryObject) {
 
   try {
     client = await getNewClient();
-    console.log(process.env.NODE_ENV);
-    console.log("AQUI: " + process.env.POSTGRES_CA);
+    console.log("NODE_ENV: " + process.env.NODE_ENV);
+    console.log("POSTEGRE_CA: " + process.env.POSTGRES_CA);
     const result = await client.query(queryObject);
     return result;
   } catch (error) {
@@ -29,6 +29,7 @@ async function getNewClient() {
     password: process.env.POSTGRES_PASSWORD,
     ssl: getSSLValues(),
   });
+
   await client.connect();
   return client;
 }
@@ -42,5 +43,6 @@ function getSSLValues() {
   if (process.env.POSTGRES_CA) {
     return { ca: process.env.POSTGRES_CA };
   }
-  return process.env.NODE_ENV === "development" ? false : true; // habilita a criptografia das informações trafegadas
+
+  return process.env.NODE_ENV === "production" ? true : false; // habilita a criptografia das informações trafegadas
 }
