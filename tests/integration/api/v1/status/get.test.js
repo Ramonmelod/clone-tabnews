@@ -9,7 +9,7 @@ test("test/integration/api/status/get.test.js response é 200", async () => {
   expect(response.status).toBe(200);
 
   const responseBody = await response.json();
-  const parsedupdatedAt = new Date(responseBody.updated_at).toISOString(); // recebe o valor vindo de updated_at dentro do new Date()
+  const parsedupdatedAt = new Date(responseBody.updated_at).toISOString(); // receives the value that comes from updated_at inside new Date()
 
   expect(responseBody.updated_at).toEqual(parsedupdatedAt);
   expect(responseBody.dependencies.database.version).toBe("16.0");
