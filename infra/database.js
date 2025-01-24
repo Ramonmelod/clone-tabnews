@@ -44,5 +44,5 @@ function getSSLValues() {
     return { ca: process.env.POSTGRES_CA };
   }
 
-  return process.env.NODE_ENV === "production" ? true : false; // habilita a criptografia das informações trafegadas
+  return process.env.NODE_ENV === "production" ? true : false; // enables encryption of information being transmitted
 }
