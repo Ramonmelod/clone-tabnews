@@ -1,5 +1,5 @@
 import migrationRunner from "node-pg-migrate";
-import { join } from "node:path";
+import { resolve } from "node:path";
 import database from "infra/database";
 
 export default async function migrations(request, response) {
@@ -16,7 +16,7 @@ export default async function migrations(request, response) {
       const migrations = await migrationRunner({
         dbClient: dbClient,
         dryRun: true,
-        dir: join("infra", "migrations"), // metodo join aplicado ao path para que caminho seja resolvido para diferentes S.O
+        dir: resolve("infra", "migrations"), // metodo resolve aplicado ao path para que caminho seja resolvido para diferentes S.O
         direction: "up", // direção da migration (down)
         verbose: true,
         migrationsTable: "pgmigrations", // define a tabela de regitro das migrations
@@ -27,7 +27,7 @@ export default async function migrations(request, response) {
       const migrations = await migrationRunner({
         dbClient: dbClient,
         dryRun: false,
-        dir: join("infra", "migrations"), // metodo join aplicado ao path para que caminho seja resolvido para diferentes S.O
+        dir: resolve("infra", "migrations"), // metodo resolve aplicado ao path para que caminho seja resolvido para diferentes S.O
         direction: "up", // direção da migration
         verbose: true,
         migrationsTable: "pgmigrations", // define a tabela de regitro das migrations
