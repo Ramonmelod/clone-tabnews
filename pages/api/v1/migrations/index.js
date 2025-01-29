@@ -32,7 +32,12 @@ export default async function migrations(request, response) {
         verbose: true,
         migrationsTable: "pgmigrations", // define a tabela de regitro das migrations
       });
-      response.status(200).json(migrations);
+
+      if (migrations.length > 0) {
+        return response.status(201).json(migrations);
+      }
+
+      return response.status(200).json(migrations);
     }
   } catch (error) {
     console.error(error);
