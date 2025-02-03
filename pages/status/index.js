@@ -39,20 +39,20 @@ function DatabaseInformations() {
     //dedupingInterval: 2000, //controls the time between the requisitions, for it has a chache memory
   });
 
-  let dataBaseInformation = " Carregando ...";
+  let dataBaseVersion = " Carregando ...";
+  let dataBaseInMaxConnections = " Carregando ...";
+  let dataBaseOpenConnections = " Carregando ...";
 
   if (!isLoading && data) {
-    dataBaseInformation = [
-      data.dependencies.database.version,
-      data.dependencies.database.max_connections,
-      data.dependencies.database.open_connections,
-    ];
+    (dataBaseVersion = data.dependencies.database.version),
+      (dataBaseInMaxConnections = data.dependencies.database.max_connections);
+    dataBaseOpenConnections = data.dependencies.database.open_connections;
   }
   return (
     <>
-      <div> Postgresql Version: {dataBaseInformation[0]} </div>
-      <div>Max number of connections: {dataBaseInformation[1]}</div>
-      <div>Open connections: {dataBaseInformation[2]}</div>
+      <div> Postgresql Version: {dataBaseVersion} </div>
+      <div>Max number of connections: {dataBaseInMaxConnections}</div>
+      <div>Open connections: {dataBaseOpenConnections}</div>
     </>
   );
 }
