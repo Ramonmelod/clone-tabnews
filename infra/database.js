@@ -10,10 +10,12 @@ async function query(queryObject) {
     const result = await client.query(queryObject);
     return result;
   } catch (error) {
-    console.log("Erro no try-catch: " + error);
+    console.log("\n Erro dentro do catch do database.js: ");
+
+    console.error(error);
     throw error;
   } finally {
-    await client.end();
+    await client?.end(); //the ? makes the client.end be called only if client is no undefined
   }
 }
 
