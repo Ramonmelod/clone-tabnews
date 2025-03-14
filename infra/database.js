@@ -6,8 +6,6 @@ async function query(queryObject) {
 
   try {
     client = await getNewClient();
-    console.log("NODE_ENV: " + process.env.NODE_ENV);
-    console.log("POSTEGRE_CA: " + process.env.POSTGRES_CA);
     const result = await client.query(queryObject);
     return result;
   } catch (error) {
@@ -22,9 +20,6 @@ async function query(queryObject) {
 }
 
 async function getNewClient() {
-  console.log("getSSLValues: " + getSSLValues());
-  console.log("POSTGRES_CA: " + process.env.POSTGRES_CA);
-
   const client = new Client({
     host: process.env.POSTGRES_HOST,
     port: process.env.POSTGRES_PORT,
