@@ -6,7 +6,7 @@ const defaultMigrationOptions = {
   dryRun: true,
   dir: resolve("infra", "migrations"), // metodo resolve aplicado ao path para que caminho seja resolvido para diferentes S.O
   direction: "up", // direção da migration
-  verbose: true,
+  logs: () => {},
   migrationsTable: "pgmigrations", // define a tabela de regitro das migrations
 };
 
