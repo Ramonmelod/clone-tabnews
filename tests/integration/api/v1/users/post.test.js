@@ -1,5 +1,7 @@
 import { version as uuidVersion } from "uuid";
 import orchestrator from "tests/orchestrator.js";
+import user from "models/user.js";
+import password from "models/password.js";
 
 beforeAll(async () => {
   await orchestrator.waitForAllServices();
@@ -16,7 +18,7 @@ describe("post api/v1/users", () => {
           "Content-Type": "Application/json",
         },
         body: JSON.stringify({
-          username: "Ramon Melo",
+          username: "RamonMelo",
           email: "ramonmelo.com@gmail.com",
           password: "password123",
         }),
@@ -28,9 +30,9 @@ describe("post api/v1/users", () => {
 
       expect(responseBody).toEqual({
         id: responseBody.id,
-        username: "Ramon Melo",
+        username: "RamonMelo",
         email: "ramonmelo.com@gmail.com",
-        password: "password123",
+        password: responseBody.password,
         created_at: responseBody.created_at,
         updated_at: responseBody.updated_at,
       });
@@ -38,6 +40,19 @@ describe("post api/v1/users", () => {
       expect(uuidVersion(responseBody.id)).toBe(4);
       expect(Date.parse(responseBody.created_at)).not.toBeNaN();
       expect(Date.parse(responseBody.updated_at)).not.toBeNaN();
+
+      const userInDataBase = await user.findOnebyUsername("RamonMelo");
+      const correctPasswordMatch = await password.compare(
+        "password123",
+        userInDataBase.password,
+      );
+      const inCorrectPasswordMatch = await password.compare(
+        "incorrectPassword",
+        userInDataBase.password,
+      );
+
+      expect(correctPasswordMatch).toBe(true);
+      expect(inCorrectPasswordMatch).toBe(false);
     });
 
     test("With duplicated email", async () => {
@@ -71,7 +86,7 @@ describe("post api/v1/users", () => {
 
       const response2Body = await response2.json();
       expect(response2Body).toEqual({
-        action: "Utilize outro email para realizar o cadastro.",
+        action: "Utilize outro email para realizar esta operação.",
         message: "O email informado já está sendo utilizado.",
         name: "ValidationError",
         status_code: 400,
@@ -109,7 +124,7 @@ describe("post api/v1/users", () => {
 
       const response2Body = await response2.json();
       expect(response2Body).toEqual({
-        action: "Utilize outro userName para realizar o cadastro.",
+        action: "Utilize outro userName para esta operação.",
         message: "O userName informado já está sendo utilizado.",
         name: "ValidationError",
         status_code: 400,
