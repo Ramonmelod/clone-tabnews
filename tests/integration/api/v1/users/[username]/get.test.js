@@ -10,19 +10,9 @@ beforeAll(async () => {
 describe("get api/v1/users/[username]", () => {
   describe("anonymous user", () => {
     test("With exact case match", async () => {
-      const response1 = await fetch("http://localhost:3000/api/v1/users", {
-        method: "POST",
-        headers: {
-          "Content-Type": "Application/json",
-        },
-        body: JSON.stringify({
-          username: "sameCase",
-          email: "same.case@email.com",
-          password: "password123",
-        }),
+      const createdUser1 = await orchestrator.createUser({
+        username: "sameCase",
       });
-
-      expect(response1.status).toBe(201);
 
       const response2 = await fetch(
         "http://localhost:3000/api/v1/users/sameCase",
@@ -35,7 +25,7 @@ describe("get api/v1/users/[username]", () => {
       expect(response2Body).toEqual({
         id: response2Body.id,
         username: "sameCase",
-        email: "same.case@email.com",
+        email: createdUser1.email,
         password: response2Body.password,
         created_at: response2Body.created_at,
         updated_at: response2Body.updated_at,
@@ -47,19 +37,9 @@ describe("get api/v1/users/[username]", () => {
     });
 
     test("With case mismatch", async () => {
-      const response1 = await fetch("http://localhost:3000/api/v1/users", {
-        method: "POST",
-        headers: {
-          "Content-Type": "Application/json",
-        },
-        body: JSON.stringify({
-          username: "diferentCase",
-          email: "diferent.case@email.com",
-          password: "password123",
-        }),
+      const createdUser2 = await orchestrator.createUser({
+        username: "diferentCase",
       });
-
-      expect(response1.status).toBe(201);
 
       const response2 = await fetch(
         "http://localhost:3000/api/v1/users/Diferentcase",
@@ -72,7 +52,7 @@ describe("get api/v1/users/[username]", () => {
       expect(response2Body).toEqual({
         id: response2Body.id,
         username: "diferentCase",
-        email: "diferent.case@email.com",
+        email: createdUser2.email,
         password: response2Body.password,
         created_at: response2Body.created_at,
         updated_at: response2Body.updated_at,
