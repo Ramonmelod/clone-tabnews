@@ -1,0 +1,53 @@
+import user from "./user.js";
+import password from "./password.js";
+import { NotFoundError, UnauthorizedError } from "infra/errors.js";
+
+async function getAuthenticatedUser(providedEmail, providedPassword) {
+  try {
+    const storedUser = await findUserByEmail(providedEmail);
+    await validatePassword(providedPassword, storedUser.password);
+    return storedUser;
+  } catch (error) {
+    if (error instanceof UnauthorizedError) {
+      throw new UnauthorizedError({
+        message: "Dados de autenticação não conferem.",
+        action: "Verifique se os dados enviados estão corretos.",
+      });
+    }
+    throw error;
+  }
+
+  async function findUserByEmail(email) {
+    let storedUser;
+    try {
+      storedUser = await user.findOnebyEmail(email);
+    } catch (error) {
+      if (error instanceof NotFoundError) {
+        throw new UnauthorizedError({
+          message: "Senha não confere",
+          action: "Verifique se os dados enviados estão corretos.",
+        });
+      }
+      throw error;
+    }
+    return storedUser;
+  }
+  async function validatePassword(givenPassword, storedPassword) {
+    const correctPasswordMatch = await password.compare(
+      givenPassword,
+      storedPassword,
+    );
+    if (!correctPasswordMatch) {
+      throw new UnauthorizedError({
+        message: "Senha não confere",
+        action: "Verifique se os dados enviados estão corretos.",
+      });
+    }
+  }
+}
+
+const authentication = {
+  getAuthenticatedUser,
+};
+
+export default authentication;
