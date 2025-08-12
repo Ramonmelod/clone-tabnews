@@ -73,6 +73,31 @@ async function findOnebyEmail(email) {
     return results.rows[0];
   }
 }
+async function findOnebyId(id) {
+  const foundUser = await runSelectQuery(id);
+  return foundUser;
+
+  async function runSelectQuery(id) {
+    const results = await database.query({
+      text: `SELECT 
+              *
+             FROM
+              users
+             WHERE
+              id = $1
+              ;`,
+      values: [id],
+    });
+    if (results.rowCount === 0) {
+      const publicError = new NotFoundError({
+        message: "O id informado não foi encontrado no sistema.",
+        action: "verifique se o id está digitado corretamente.",
+      });
+      throw publicError;
+    }
+    return results.rows[0];
+  }
+}
 async function update(username, userInputValues) {
   const currentUser = await findOnebyUsername(username);
   if ("username" in userInputValues) {
@@ -154,6 +179,7 @@ async function validateUniqueEmail(email) {
     throw publicError;
   }
 }
+
 async function hashPasswordInObject(userInputValues) {
   const hashedPassword = await password.hash(userInputValues.password);
   userInputValues.password = hashedPassword;
@@ -165,6 +191,7 @@ const user = {
   findOnebyUsername,
   findOnebyEmail,
   update,
+  findOnebyId,
 };
 
 export default user;
