@@ -77,7 +77,7 @@ describe("post api/v1/sessions", () => {
         status_code: 401,
       });
     });
-    test("with correct `email`, but rrect `password`", async () => {
+    test("with correct `email`, but correct `password`", async () => {
       const createdUser = await orchestrator.createUser({
         email: "tudo.correto@gmail.com",
         password: "tudocorreto",
@@ -113,6 +113,7 @@ describe("post api/v1/sessions", () => {
       expiresAt.setMilliseconds(0);
       createdAt.setMilliseconds(0);
       expect(expiresAt - createdAt).toBe(session.EXPIRATION_IN_MILLISECONDS);
+
       const parsedSetCookie = setCookieParser(response, { map: true });
       expect(parsedSetCookie.session_id).toEqual({
         name: "session_id",
